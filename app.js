@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleDarkModeButton = document.getElementById("toggle-dark-mode");
     const taskStats = document.getElementById("task-stats");
 
+    // Request notification permission when the page loads
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+
     // Load tasks from localStorage
     loadTasks();
 
@@ -111,7 +116,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // If the task is due in 5 hours, send a notification
         if (timeDifference > 0 && timeDifference <= 5 * 60 * 60 * 1000) {
             setTimeout(() => {
-                alert(`Reminder: Task is due in less than 5 hours!`);
+                if (Notification.permission === "granted") {
+                    new Notification("Reminder: Task is due in less than 5 hours!");
+                }
             }, timeDifference);
         }
     }
